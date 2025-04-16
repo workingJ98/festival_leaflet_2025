@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0">
+  <title>서울서커스페스티벌 2025</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: sans-serif;
+      background: #000;
+      overflow: hidden;
+      touch-action: pan-y pinch-zoom;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slides-wrapper {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 100vw;
+      height: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .prev-btn { left: 10px; }
+    .next-btn { right: 10px; }
+
+    .menu-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 20;
+      font-size: 1.5rem;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .menu-list {
+      position: absolute;
+      top: 50px;
+      left: 10px;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .menu-list.show { display: flex; }
+    .menu-list button {
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .slide-indicator {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      color: #fff;
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .slide-indicator {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+      }
+
+      .menu-btn {
+        font-size: 1.2rem;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="menu-list" id="menuList">
+    <button onclick="goToSlideInstant(1)">🎪 축제 소개</button>
+    <button onclick="goToSlideInstant(3)">🎭 공연 정보</button>
+    <button onclick="goToSlideInstant(22)">🗓️ 일정표</button>
+    <button onclick="goToSlideInstant(25)">🗺️ 지도</button>
+  </div>
+
+  <div class="slider-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+      <div class="slide"><img src="main poster.jpg" alt="메인 포스터"></div>
+      <div class="slide"><img src="festinfo1.jpg" alt="축제 정보 1"></div>
+      <div class="slide"><img src="festinfo2.jpg" alt="축제 정보 2"></div>
+      <div class="slide"><img src="info1.jpg" alt="공연 소개 1"></div>
+      <div class="slide"><img src="info2.jpg" alt="공연 소개 2"></div>
+      <div class="slide"><img src="info3.jpg" alt="공연 소개 3"></div>
+      <div class="slide"><img src="info4.jpg" alt="공연 소개 4"></div>
+      <div class="slide"><img src="info5.jpg" alt="공연 소개 5"></div>
+      <div class="slide"><img src="info6.jpg" alt="공연 소개 6"></div>
+      <div class="slide"><img src="info7.jpg" alt="공연 소개 7"></div>
+      <div class="slide"><img src="info8.jpg" alt="공연 소개 8"></div>
+      <div class="slide"><img src="info9.jpg" alt="공연 소개 9"></div>
+      <div class="slide"><img src="info10.jpg" alt="공연 소개 10"></div>
+      <div class="slide"><img src="info11.jpg" alt="공연 소개 11"></div>
+      <div class="slide"><img src="info12.jpg" alt="공연 소개 12"></div>
+      <div class="slide"><img src="info13.jpg" alt="공연 소개 13"></div>
+      <div class="slide"><img src="info14.jpg" alt="공연 소개 14"></div>
+      <div class="slide"><img src="info15.jpg" alt="공연 소개 15"></div>
+      <div class="slide"><img src="info16.jpg" alt="공연 소개 16"></div>
+      <div class="slide"><img src="info17.jpg" alt="공연 소개 17"></div>
+      <div class="slide"><img src="info18.jpg" alt="공연 소개 18"></div>
+      <div class="slide"><img src="program.jpg" alt="공연 프로그램"></div>
+      <div class="slide"><img src="timetable53.jpg" alt="일정표 1"></div>
+      <div class="slide"><img src="timetable54.jpg" alt="일정표 2"></div>
+      <div class="slide"><img src="timetable55.jpg" alt="일정표 3"></div>
+      <div class="slide"><img src="map1.jpg" alt="지도 1"></div>
+      <div class="slide"><img src="map2.jpg" alt="지도 2"></div>
+    </div>
+    <div class="slide-indicator" id="slideIndicator">1 / 28</div>
+  </div>
+
+  <button class="nav-btn prev-btn" onclick="changeSlide(-1)">◀</button>
+  <button class="nav-btn next-btn" onclick="changeSlide(1)">▶</button>
+
+  <script>
+    const slidesWrapper = document.getElementById('slidesWrapper');
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let current = 0;
+
+    const slideIndicator = document.getElementById('slideIndicator');
+
+    slidesWrapper.style.width = `${totalSlides * 100}vw`;
+
+    function updateSlide() {
+      slidesWrapper.style.transform = `translateX(-${current * 100}vw)`;
+      slideIndicator.textContent = `${current + 1} / ${totalSlides}`;
+    }
+
+    function changeSlide(direction) {
+      slidesWrapper.style.transition = 'transform 0.5s ease';
+      current += direction;
+      if (current < 0) current = 0;
+      if (current >= totalSlides) current = totalSlides - 1;
+      updateSlide();
+    }
+
+    function toggleMenu() {
+      document.getElementById('menuList').classList.toggle('show');
+    }
+
+    function goToSlideInstant(index) {
+      slidesWrapper.style.transition = 'none';
+      current = index;
+      updateSlide();
+      setTimeout(() => {
+        slidesWrapper.style.transition = 'transform 0.5s ease';
+      }, 50);
+      document.getElementById('menuList').classList.remove('show');
+    }
+
+    let startX = 0, startY = 0;
+    let endX = 0, endY = 0;
+    let isPinchZoom = false;
+
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        isPinchZoom = true;
+        return;
+      }
+      isPinchZoom = false;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      if (isPinchZoom || e.changedTouches.length > 1) return;
+
+      endX = e.changedTouches[0].clientX;
+      endY = e.changedTouches[0].clientY;
+
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
+      const angle = Math.abs(Math.atan2(deltaY, deltaX) * 180 / Math.PI);
+
+      if (Math.abs(deltaX) > 50 && (angle < 15 || angle > 165)) {
+        if (deltaX < 0) changeSlide(1);
+        else changeSlide(-1);
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
